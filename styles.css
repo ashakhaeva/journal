@@ -18,6 +18,10 @@ h4{
     margin: 0;
 }
 
+div.grid{
+    grid-auto-flow: column;
+}
+
 .container{
 
     width: 600px;
@@ -35,6 +39,12 @@ input{
     height: 40px;
     line-height: 40px;
     border: 3px solid rgba(0, 0, 0, 0);
+}
+
+input:focus{
+    outline: none;
+    border: solid 3px;
+    border-color: #4f2990;
 }
 
 ul{
