@@ -110,3 +110,12 @@ li.completed_list_item{
     background-color: white;
     color: #4f2990;
 }
+
+.btn-outline-\*{
+    color: #4f2990;
+    float: right;
+}
+
+.btn-outline-\*:active{
+    outline:none;
+}
