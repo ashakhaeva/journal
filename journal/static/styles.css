@@ -119,3 +119,13 @@ li.completed_list_item{
 .btn-outline-\*:active{
     outline:none;
 }
+
+.login_container {
+    color: #4f2990;
+
+}
+
+.btn-primary {
+    background-color: #4f2990 !important;
+    border-color: #4f2990 !important;
+}
