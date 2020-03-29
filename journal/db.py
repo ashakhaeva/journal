@@ -4,7 +4,7 @@ from flask_pymongo import PyMongo
 
 def get_db(app):
     if 'db' not in g:
-        g.db = PyMongo(app)
+        g.db = PyMongo(app).db
     return g.db
 
 

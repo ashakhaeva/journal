@@ -12,7 +12,7 @@
 </head>
     <body>
         <div>
-            <H1><span><i class="fas fa-calendar-week"></i></span>{% if name %}{{name}}'s{%endif%} Week 5 (Jan 27 — Feb 2)<button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button></H1>
+            <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week 5 (Jan 27 — Feb 2){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
         </div>
         <div class="row">
             <div class = "col-md-6">
