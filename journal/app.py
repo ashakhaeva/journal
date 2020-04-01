@@ -3,8 +3,8 @@ from . import db
 from journal.db import get_db
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from flask_pymongo import PyMongo
-
+import datetime
+from datetime import date, time, datetime, timedelta
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -19,10 +19,24 @@ app = create_app()
 
 
 @app.route('/')
-def hello_world():
+def get_current_week():
+    today = date.today()
+    today_tup = date(today.year, today.month, today.day).isocalendar()
+    week_number = today_tup[1]
+    weekday = today.weekday()
+    start = today - timedelta(days=weekday)
+    dates = [start + timedelta(days=d) for d in range(7)]
+    days = []
+    for i in dates:
+        day = i.strftime("%A, %b %d %Y")
+        days.append(day)
+    monday = dates[0].strftime("%b %d")
+    sunday = dates[6].strftime("%b %d")
+
+
     if "name" in session:
         return render_template('index.html', name=session["name"])
-    return render_template('index.html')
+    return render_template('index.html', week_number = week_number, days = days, monday = monday, sunday = sunday)
 
 
 @app.route('/another')
@@ -92,6 +106,8 @@ def sign_up():
 def show_users():
     user = g.db.users.find_one({"name": "Anastasia"})
     return jsonify({"name": user["name"]})
+
+
 
 
 if __name__ == "__main__":

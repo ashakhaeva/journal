@@ -12,17 +12,17 @@
 </head>
     <body>
         <div>
-            <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week 5 (Jan 27 — Feb 2){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
+            <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week {{ week_number }} ({{monday}} — {{sunday}}){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
         </div>
         <div class="row">
             <div class = "col-md-6">
                 <div class = "container monday">
-                    <h4 data-toggle="modal" data-target=".bd-example-modal-lg">Monday, Jan 27 2020</h4>
+                    <h4 data-toggle="modal" data-target=".bd-example-modal-lg">{{days[0]}}</h4>
                     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">Monday, Jan 27 2020</h3>
+                                    <h3 class="modal-title">{{days[0]}}</h3>
                                 </div>
                                 <div class="modal-body">
                                     <input type="text" placeholder="Add a new todo">
@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class = "col-md-6">
                         <div class = "container tuesday">
-                            <h4>Tuesday, Jan 28 2020</h4>
+                            <h4>{{days[1]}}</h4>
                             <input type="text" placeholder="Add a new todo">
                             <ul>
 
@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class = "col-md-6">
                         <div class = "container wednesday">
-                            <h4>Wednesday, Jan 29 2020</h4>
+                            <h4>{{days[2]}}</h4>
                             <input type="text" placeholder="Add a new todo">
                             <ul>
 
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class = "col-md-6">
                         <div class = "container thursday">
-                            <h4>Thursday, Jan 30 2020</h4>
+                            <h4>{{days[3]}}</h4>
                             <input type="text" placeholder="Add a new todo">
                             <ul>
 
@@ -86,7 +86,7 @@
 
             <div class = "col-md-6">
                 <div class = "container friday">
-                    <h4>Friday, Jan 31 2020</h4>
+                    <h4>{{days[4]}}</h4>
                     <input type="text" placeholder="Add a new todo">
                     <ul>
 
@@ -96,7 +96,7 @@
             <div class="row">
                 <div class = "col-md-6">
                     <div class = "container saturday">
-                        <h4>Saturday, Feb 1 2020</h4>
+                        <h4>{{days[5]}}</h4>
                         <input type="text" placeholder="Add a new todo">
                         <ul>
 
@@ -107,7 +107,7 @@
             <div class="row">
                 <div class = "col-md-6">
                     <div class = "container sunday">
-                        <h4>Sunday, Feb 2 2020</h4>
+                        <h4>{{days[6]}}</h4>
                         <input type="text" placeholder="Add a new todo">
                         <ul>
 
