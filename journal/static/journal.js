@@ -7,7 +7,10 @@ $(document).ready(function () {
     });
     day.on("click", ".todo", function (){
         $(this).toggleClass("completed_todo");
-        $("i", this).toggleClass("far fa-square far fa-check-square");
+        $(this)
+            .find('[data-fa-i2svg]')
+            .toggleClass('far fa-square')
+            .toggleClass('fas fa-check-square');
     });
     day.on("click", ".event", function (){
         $(this).toggleClass("completed_event");

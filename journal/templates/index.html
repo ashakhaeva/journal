@@ -4,53 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Your Week</title>
+    <link rel="stylesheet" type="text/css" href="../static/fontawesome/css/all.css">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
     <link href="//fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
-    <script src="//kit.fontawesome.com/f5b3c4f317.js" crossorigin="anonymous"></script>
+
+
 
 </head>
     <body>
         <div>
             <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week {{ week_number }} ({{monday}} — {{sunday}}){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
         </div>
+<!--jinja generation test-->
         <div class="row">
             <div class = "col-md-6">
-                <div class = "container monday">
-                    <h4 data-toggle="modal" data-target=".bd-example-modal-lg">{{days[0]}}</h4>
-                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">{{days[0]}}</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="text" placeholder="Add a new todo">
-                                    <ul>
-                                        <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event <button type="button" class="btn btn-outline-*">Edit</button></li>
-                                        <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
-                                        <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>
-                                        <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
-                                        <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
-                                    </ul>
-                                </div>
+                {% for day in days %}
+                    {% if loop.index0 in [1, 2, 3, 5, 6] %}
+                        <div class="row">
+                            <div class = "col-md-6">
+                    {% endif %}
+                    {% if loop.index0 == 4 %}
+                        <div class = "col-md-6">
+                    {% endif %}
+                    <div class = "container {{day[:3].lower()}}">
+                            <h4>{{ day }}</h4>
+                            <input type="text" placeholder="Add a new todo">
+                            <ul>
+                                <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event</li>
+                                <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
+                                <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>
+                                <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
+                                <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
+                            </ul>
+                        </div>
+                    {% if loop.index0 in [1, 2, 3, 5, 6] %}
                             </div>
                         </div>
-                    </div>
-
-                    <input type="text" placeholder="Add a new todo">
-                    <ul>
-                        <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event</li>
-                        <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
-                        <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>
-                        <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
-                        <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
-                    </ul>
-                </div>
+                    {% endif %}
+                    {% if loop.index0 == 3 %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
                 <div class="row">
                     <div class = "col-md-6">
-                        <div class = "container tuesday">
-                            <h4>{{days[1]}}</h4>
+                        <div class = "container todoseebuy">
+                            <h4>TO DO/SEE/BUY</h4>
                             <input type="text" placeholder="Add a new todo">
                             <ul>
 
@@ -58,78 +57,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class = "col-md-6">
-                        <div class = "container wednesday">
-                            <h4>{{days[2]}}</h4>
-                            <input type="text" placeholder="Add a new todo">
-                            <ul>
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class = "col-md-6">
-                        <div class = "container thursday">
-                            <h4>{{days[3]}}</h4>
-                            <input type="text" placeholder="Add a new todo">
-                            <ul>
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-
-            <div class = "col-md-6">
-                <div class = "container friday">
-                    <h4>{{days[4]}}</h4>
-                    <input type="text" placeholder="Add a new todo">
-                    <ul>
-
-                    </ul>
-                </div>
-
-            <div class="row">
-                <div class = "col-md-6">
-                    <div class = "container saturday">
-                        <h4>{{days[5]}}</h4>
-                        <input type="text" placeholder="Add a new todo">
-                        <ul>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col-md-6">
-                    <div class = "container sunday">
-                        <h4>{{days[6]}}</h4>
-                        <input type="text" placeholder="Add a new todo">
-                        <ul>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col-md-6">
-                    <div class = "container todoseebuy">
-                        <h4>TO DO/SEE/BUY</h4>
-                        <input type="text" placeholder="Add a new todo">
-                        <ul>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
-        </div>
+<!--jinja generation test end-->
+
+<!--        <div class="row">-->
+<!--            <div class = "col-md-6">-->
+<!--                <div class = "container monday">-->
+<!--                    <h4 data-toggle="modal" data-target=".bd-example-modal-lg">{{days[0]}}</h4>-->
+<!--                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">-->
+<!--                        <div class="modal-dialog modal-lg">-->
+<!--                            <div class="modal-content">-->
+<!--                                <div class="modal-header">-->
+<!--                                    <h3 class="modal-title">{{days[0]}}</h3>-->
+<!--                                </div>-->
+<!--                                <div class="modal-body">-->
+<!--                                    <input type="text" placeholder="Add a new todo">-->
+<!--                                    <ul>-->
+<!--                                        <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event <button type="button" class="btn btn-outline-*">Edit</button></li>-->
+<!--                                        <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>-->
+<!--                                        <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>-->
+<!--                                        <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>-->
+<!--                                        <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <input type="text" placeholder="Add a new todo">-->
+<!--                    <ul>-->
+<!--                        <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event</li>-->
+<!--                        <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>-->
+<!--                        <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>-->
+<!--                        <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>-->
+<!--                        <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
 
 
 
@@ -138,6 +102,8 @@
                 integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI="
                 crossorigin="anonymous"></script>
         <script type="text/javascript" src="../static/journal.js"></script>
+        <script defer src="../static/fontawesome/js/all.js" crossorigin="anonymous"></script>
+
 <script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>

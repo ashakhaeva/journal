@@ -36,7 +36,7 @@ def get_current_week():
 
     if "name" in session:
         return render_template('index.html', name=session["name"])
-    return render_template('index.html', week_number = week_number, days = days, monday = monday, sunday = sunday)
+    return render_template('index.html', week_number = week_number, days = days, monday = monday, sunday = sunday, dates = dates)
 
 
 @app.route('/another')
