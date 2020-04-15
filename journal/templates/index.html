@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../static/fontawesome/css/all.css">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link href="//fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
 
 
@@ -16,7 +17,6 @@
         <div>
             <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week {{ week_number }} ({{monday}} — {{sunday}}){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
         </div>
-<!--jinja generation test-->
         <div class="row">
             <div class = "col-md-6">
                 {% for day in days %}
@@ -28,16 +28,63 @@
                         <div class = "col-md-6">
                     {% endif %}
                     <div class = "container {{day[:3].lower()}}">
-                            <h4>{{ day }}</h4>
-                            <input type="text" placeholder="Add a new todo">
-                            <ul>
-                                <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event</li>
-                                <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
-                                <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>
-                                <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
-                                <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
-                            </ul>
+                        <h4 data-toggle="modal" data-target="#dayToDos" data-day="{{day}}">{{ day }}<button type="button" data-toggle="modal" data-target="#addToDo" class="btn btn-outline-info add-todo">Add todo</button></h4>
+<!--                        <div class="modal fade bd-example-modal-lg" id="dayToDos" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">-->
+<!--                            <div class="modal-dialog modal-lg">-->
+<!--                                <div class="modal-content">-->
+<!--                                    <div class="modal-header">-->
+<!--                                        <h3 class="modal-title">day</h3>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal-body">-->
+<!--                                        <input type="text" placeholder="Add a new todo">-->
+<!--                                        <ul>-->
+<!--                                            <li class="event"><div><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event</div> <div><button type="button" class="btn btn-outline-*">Edit</button></div></li>-->
+<!--                                            <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>-->
+<!--                                            <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>-->
+<!--                                            <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>-->
+<!--                                            <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="modal fade bd-example-modal-lg" id="addToDo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">New todo</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type of todo</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" id="type_todo" href="#">Todo</a>
+                                                    <a class="dropdown-item" id="type_meeting" href="#">Meeting</a>
+                                                    <a class="dropdown-item" id="type_event" href="#">Event</a>
+                                                    <a class="dropdown-item" id="type_list_item" href="#">Item from your list</a>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Add a new todo">
+                                            <input type="text" class="form-control" name="todo_date_time" value="">
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Create</button>
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+<!--                        <input type="text" placeholder="Add a new todo">-->
+                        <ul>
+
+                            <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event<span class="ul_edit"><i class="fas fa-edit"></i></span><span class="ul_delete"><i class="fas fa-trash-alt" ></i></span></li>
+                            <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
+                            <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>
+                            <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
+                            <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
+                        </ul>
+                    </div>
                     {% if loop.index0 in [1, 2, 3, 5, 6] %}
                             </div>
                         </div>
@@ -59,52 +106,17 @@
                 </div>
             </div>
         </div>
-<!--jinja generation test end-->
-
-<!--        <div class="row">-->
-<!--            <div class = "col-md-6">-->
-<!--                <div class = "container monday">-->
-<!--                    <h4 data-toggle="modal" data-target=".bd-example-modal-lg">{{days[0]}}</h4>-->
-<!--                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">-->
-<!--                        <div class="modal-dialog modal-lg">-->
-<!--                            <div class="modal-content">-->
-<!--                                <div class="modal-header">-->
-<!--                                    <h3 class="modal-title">{{days[0]}}</h3>-->
-<!--                                </div>-->
-<!--                                <div class="modal-body">-->
-<!--                                    <input type="text" placeholder="Add a new todo">-->
-<!--                                    <ul>-->
-<!--                                        <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event <button type="button" class="btn btn-outline-*">Edit</button></li>-->
-<!--                                        <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>-->
-<!--                                        <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>-->
-<!--                                        <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>-->
-<!--                                        <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>-->
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <input type="text" placeholder="Add a new todo">-->
-<!--                    <ul>-->
-<!--                        <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event</li>-->
-<!--                        <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>-->
-<!--                        <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>-->
-<!--                        <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>-->
-<!--                        <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>-->
-<!--                    </ul>-->
-<!--                </div>-->
 
 
 
-        <script
-                src="//code.jquery.com/jquery-3.4.1.slim.js"
-                integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI="
-                crossorigin="anonymous"></script>
-        <script type="text/javascript" src="../static/journal.js"></script>
-        <script defer src="../static/fontawesome/js/all.js" crossorigin="anonymous"></script>
-
-<script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/jquery-3.4.1.slim.js" integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI=" crossorigin="anonymous"></script>
+        <script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="../static/journal.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script defer src="../static/fontawesome/js/all.js" crossorigin="anonymous"></script>
+
 </body>
 </html>

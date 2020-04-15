@@ -1,6 +1,54 @@
 $(document).ready(function () {
 
-    // Check off specific todos by clicking
+        //pick date and time for todos
+    $('input[name="todo_date_time"]').daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,
+        "minYear": 1901,
+        "maxYear": 2100,
+        "showWeekNumbers": true,
+        "timePicker": true,
+        "timePicker24Hour": true,
+        "timePickerIncrement": 15,
+        "locale": {
+        "format": "MM/DD/YYYY hh-mm"}
+    });
+
+    // make todo type selection menu work
+    $('.dropdown-item').on( 'click',function() {
+        var text = $(this).html();
+        $(this).closest('.input-group-prepend').find('.dropdown-toggle').html(text);
+        if ($(this).attr("id") === "type_meeting"){
+            $('input[name="todo_date_time"]').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "minYear": 1901,
+                "maxYear": 2100,
+                "showWeekNumbers": true,
+                "timePicker": true,
+                "timePicker24Hour": true,
+                "timePickerIncrement": 15,
+                "locale": {
+                "format": "MM/DD/YYYY hh-mm"}
+            })
+        }
+        else {
+            $('input[name="todo_date_time"]').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "minYear": 1901,
+                "maxYear": 2100,
+                "showWeekNumbers": true,
+                "timePicker": false,
+                "timePicker24Hour": false,
+                "locale": {
+                "format": "MM/DD/YYYY"}
+            })
+
+        }
+    });
+
+        // Check off specific todos by clicking
     var day = $("ul");
     day.on("click", ".meeting", function (){
         $(this).toggleClass("completed_meeting");
@@ -18,6 +66,27 @@ $(document).ready(function () {
     day.on("click", ".list_item", function (){
         $(this).toggleClass("completed_list_item");
         $("span", this).toggleClass("green");
+    });
+
+    var edit_ul = $(".ul_edit");
+    edit_ul.on("click",function (e) {
+        console.log("clicked edit");
+        e.stopPropagation();
+    })
+
+    var delete_ul = $(".ul_delete");
+    delete_ul.on("click",function (e) {
+        console.log("clicked delete");
+        e.stopPropagation();
+    })
+
+    //add todo modal
+    $('#addToDo').on('show.bs.modal', function (e) {
+        var h4 = $(e.relatedTarget);
+        var day = h4.data('day');
+        var modal = $(this);
+        modal.find('.modal-title').text(day);
+        e.stopPropagation();
     });
 
     //add new todos
