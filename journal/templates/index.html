@@ -55,21 +55,25 @@
                                         <h3 class="modal-title">New todo</h3>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type of todo</button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" id="type_todo" href="#">Todo</a>
-                                                    <a class="dropdown-item" id="type_meeting" href="#">Meeting</a>
-                                                    <a class="dropdown-item" id="type_event" href="#">Event</a>
-                                                    <a class="dropdown-item" id="type_list_item" href="#">Item from your list</a>
+                                        <form action="/todo/create" method="post" name="todo_create">
+                                            <div class="input-group mb-3 ">
+                                                <div class="input-group-prepend">
+                                                    <input type="hidden" class="js_todo_type" name="todo_type" value="">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type of todo</button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" id="type_todo" href="#">Todo</a>
+                                                        <a class="dropdown-item" id="type_meeting" href="#">Meeting</a>
+                                                        <a class="dropdown-item" id="type_event" href="#">Event</a>
+                                                        <a class="dropdown-item" id="type_list_item" href="#">Item from your list</a>
+                                                    </div>
                                                 </div>
+                                                <input type="text" class="form-control" name="todo_text" aria-label="Text input with dropdown button" placeholder="Add a new todo">
+                                                <input type="text" class="form-control" name="todo_date_time" value="">
                                             </div>
-                                            <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Add a new todo">
-                                            <input type="text" class="form-control" name="todo_date_time" value="">
-                                        </div>
 
-                                        <button type="submit" class="btn btn-primary">Create</button>
+                                            <button type="submit" class="btn btn-primary js_create_todo">Create</button>
+                                        </form>
+
 
                                     </div>
                                 </div>
@@ -109,7 +113,7 @@
 
 
 
-<script src="//code.jquery.com/jquery-3.4.1.slim.js" integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI=" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 

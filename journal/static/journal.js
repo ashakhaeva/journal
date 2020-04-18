@@ -18,6 +18,7 @@ $(document).ready(function () {
     $('.dropdown-item').on( 'click',function() {
         var text = $(this).html();
         $(this).closest('.input-group-prepend').find('.dropdown-toggle').html(text);
+        $(this).closest('.input-group-prepend').find('.js_todo_type').val(text);
         if ($(this).attr("id") === "type_meeting"){
             $('input[name="todo_date_time"]').daterangepicker({
                 "singleDatePicker": true,
@@ -47,6 +48,20 @@ $(document).ready(function () {
 
         }
     });
+
+    //send todo
+
+    $("form[name='todo_create']").submit(function (e) {
+        e.preventDefault();
+        var form = $(this);
+        $.post(form.attr("action"), form.serialize(), function (resp) {
+            console.log(resp);
+        });
+
+    });
+
+
+
 
         // Check off specific todos by clicking
     var day = $("ul");

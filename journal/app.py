@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 import datetime
 from datetime import date, time, datetime, timedelta
+from dateutil.parser import parse
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -35,9 +36,27 @@ def get_current_week():
 
 
     if "name" in session:
-        return render_template('index.html', name=session["name"])
+        return render_template('index.html', name=session["name"], week_number = week_number, days = days, monday = monday, sunday = sunday, dates = dates)
     return render_template('index.html', week_number = week_number, days = days, monday = monday, sunday = sunday, dates = dates)
 
+@app.route("/todo/create", methods=("POST",))
+def create_todo():
+    if "user_id" in session:
+        print(request.form)
+        date_created = datetime.today()
+        user = session["user_id"]
+        todo_type = request.form["todo_type"].lower()
+        if todo_type not in ("meeting", "todo", "event", "item from your list"):
+            return jsonify({"Error": "Invalid input"})
+
+        todo_text = request.form["todo_text"]
+        todo_date_time = parse(request.form["todo_date_time"])
+        completed = False
+        db = get_db(app)
+        db.todos.insert_one({"created": date_created, "user": user, "type": todo_type, "text": todo_text, "date_time": todo_date_time, "completed": completed})
+        return jsonify({"Success": True})
+    else:
+        return jsonify({"Error": "Invalid user"})
 
 @app.route('/another')
 def another():
@@ -63,7 +82,7 @@ def login():
         if error is None:
             session.clear()
             session["name"] = user["name"]
-            # # session["user._id"] = user_id
+            session["user_id"] = str(user["_id"])
             return redirect('/')
         flash(error)
         return render_template('/login.html')
