@@ -21,21 +21,26 @@ app = create_app()
 
 @app.route('/')
 def get_current_week():
-    today = date.today()
-    today_tup = date(today.year, today.month, today.day).isocalendar()
-    week_number = today_tup[1]
-    weekday = today.weekday()
-    start = today - timedelta(days=weekday)
-    dates = [start + timedelta(days=d) for d in range(7)]
-    days = []
-    for i in dates:
-        day = i.strftime("%A, %b %d %Y")
-        days.append(day)
-    monday = dates[0].strftime("%b %d")
-    sunday = dates[6].strftime("%b %d")
+    if "user_id" in session:
+        today = datetime.today()
+        today_tup = date(today.year, today.month, today.day).isocalendar()
+        week_number = today_tup[1]
+        weekday = today.weekday()
+        start = today - timedelta(days=weekday)
+        dates = [start + timedelta(days=d) for d in range(7)]
+        days = []
+        db = get_db(app)
+        for i in dates:
+            day = i.strftime("%A, %b %d %Y")
+            days.append(day)
+            todos = db.todos.find({"user": session["user_id"], "date_time": i})
+        monday = dates[0].strftime("%b %d")
+        sunday = dates[6].strftime("%b %d")
 
+    # забрать все туду для каждого дня недели и данного юзера
+    # передать в шаблон нужные переменные
+    # каждый туду показать как li в соответствующем дне
 
-    if "name" in session:
         return render_template('index.html', name=session["name"], week_number = week_number, days = days, monday = monday, sunday = sunday, dates = dates)
     return render_template('index.html', week_number = week_number, days = days, monday = monday, sunday = sunday, dates = dates)
 
@@ -60,7 +65,28 @@ def create_todo():
 
 @app.route('/another')
 def another():
-    return "Another route"
+    if "user_id" in session:
+        today = date.today()
+        today_tup = date(today.year, today.month, today.day).isocalendar()
+        week_number = today_tup[1]
+        weekday = today.weekday()
+        start = today - timedelta(days=weekday)
+        dates = [start + timedelta(days=d) for d in range(7)]
+        days = []
+        db = get_db(app)
+        for item in dates:
+            day = item.strftime("%A, %b %d %Y")
+            days.append(day)
+            todos = db.todos.find_one({"user": session["user_id"], "date_time": {"$gte": newDate(item), "$lte": newDate(item)}})
+        monday = dates[0].strftime("%b %d")
+        sunday = dates[6].strftime("%b %d")
+
+    # забрать все туду для каждого дня недели и данного юзера
+    # передать в шаблон нужные переменные
+    # каждый туду показать как li в соответствующем дне
+
+        return jsonify(todos)
+
 
 
 @app.route("/login", methods=("GET", "POST"))
