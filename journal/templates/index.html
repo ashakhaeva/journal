@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class = "col-md-6">
-                {% for day in days %}
+                {% for day in dates %}
                     {% if loop.index0 in [1, 2, 3, 5, 6] %}
                         <div class="row">
                             <div class = "col-md-6">
@@ -24,8 +24,8 @@
                     {% if loop.index0 == 4 %}
                         <div class = "col-md-6">
                     {% endif %}
-                    <div class = "container {{day[:3].lower()}}">
-                        <h4 data-toggle="modal" data-target="#dayToDos" data-day="{{day}}">{{ day }}<button type="button" data-toggle="modal" data-target="#addToDo" class="btn btn-outline-info add-todo">Add todo</button></h4>
+                    <div class = "container {{ day.strftime('%A, %b %d %Y')[:3].lower() }}">
+                        <h4 data-toggle="modal" data-target="#dayToDos" data-day="{{day}}">{{ day.strftime('%A, %b %d %Y') }}<button type="button" data-toggle="modal" data-target="#addToDo" class="btn btn-outline-info add-todo">Add todo</button></h4>
 <!--                        <div class="modal fade bd-example-modal-lg" id="dayToDos" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">-->
 <!--                            <div class="modal-dialog modal-lg">-->
 <!--                                <div class="modal-content">-->
@@ -74,6 +74,17 @@
                             </div>
                         </div>
                         <ul>
+                            {% for task in all_todos[day] %}
+                                {% if task.type == "event": %}
+                                    {% set i_class = "fas fa-birthday-cake" %}
+                                {% elif task.type == "meeting": %}
+                                    {% set i_class = "fas fa-clock" %}
+                                {% elif task.type == "todo": %}
+                                    {% set i_class = "far fa-square" %}
+                                {% endif %}
+                                <li class="{{task.type}}"><span><i class="{{i_class}}"></i></span> {% if task.type == "meeting" %}{{task.date_time.hour}}-{{task.date_time.minute}} {% endif %}{{task.text}}<span class="ul_edit"><i class="fas fa-edit"></i></span><span class="ul_delete"><i class="fas fa-trash-alt" ></i></span></li>
+
+                            {% endfor %}
                             <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event<span class="ul_edit"><i class="fas fa-edit"></i></span><span class="ul_delete"><i class="fas fa-trash-alt" ></i></span></li>
                             <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
                             <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Another</title>
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+</head>
+<body>
+{% for day in dates %}
+ {{day.strftime("%A, %b %d %Y")}}
+    {% for task in all_todos[day] %}
+        {% if task.type == "meeting": %}
+            {% set task_time = task.date_time.hour - task.date_time.minute %}
+        {% endif %}
+        {{task.text}}={{task.type}} + time = {{task_time}}
+    {% endfor %}
+{% endfor %}
+</body>
+</html>
