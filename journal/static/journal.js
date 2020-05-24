@@ -55,10 +55,22 @@ $(document).ready(function () {
         e.preventDefault();
         var form = $(this);
         $.post(form.attr("action"), form.serialize(), function (resp) {
-            console.log(resp);
+            // console.log(resp);
+            if (resp["Success"]===true){
+                $('#addToDo').modal('hide');
+                $('.toast').toast('show');
+            //    подсосать новую тудуху из базы
+            } else{
+                alert("Make sure you've selected todo type and filled out all the form fields");
+            }
+
         });
 
     });
+
+     //если не ок — показать ошибку
+        //если ок: 1. закрыть форму 2. Подгрузить созданное событие в нужный день
+
 
 
 
@@ -103,6 +115,12 @@ $(document).ready(function () {
         modal.find('.modal-title').text(day);
         e.stopPropagation();
     });
+
+    // close todo modal on submit
+    // $('.js_create_todo').click(function (e) {
+    //     $('#addToDo').modal('hide');
+    //
+    // });
 
     //add new todos
     $("div.container > input").keyup(function(event){

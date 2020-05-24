@@ -174,3 +174,7 @@ li.completed_list_item{
 .form-control:focus-within {
     box-shadow: 0 0 0 0.1rem #4f2990 !important;
 }
+
+.toast {
+    autohide: false;
+}

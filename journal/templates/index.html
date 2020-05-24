@@ -11,7 +11,11 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
 </head>
     <body>
-        <div>
+        <div class="toast" role="alert" data-delay="1500" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 10%; left: 50%; z-index:1;">
+            <div class="toast-body">
+                Todo created!
+            </div>
+        </div>
             <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week {{ week_number }} ({{monday}} — {{sunday}}){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
         </div>
         <div class="row">
@@ -85,9 +89,9 @@
                                 <li class="{{task.type}}"><span><i class="{{i_class}}"></i></span> {% if task.type == "meeting" %}{{task.date_time.hour}}-{{task.date_time.minute}} {% endif %}{{task.text}}<span class="ul_edit"><i class="fas fa-edit"></i></span><span class="ul_delete"><i class="fas fa-trash-alt" ></i></span></li>
 
                             {% endfor %}
-                            <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event<span class="ul_edit"><i class="fas fa-edit"></i></span><span class="ul_delete"><i class="fas fa-trash-alt" ></i></span></li>
-                            <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>
-                            <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>
+<!--                            <li class="event"><span><i class="fas fa-birthday-cake"></i></span>Masha's Birthday — event<span class="ul_edit"><i class="fas fa-edit"></i></span><span class="ul_delete"><i class="fas fa-trash-alt" ></i></span></li>-->
+<!--                            <li class="meeting"><span><i class="fas fa-clock"></i></span>13-00 Dentist  — meeting</li>-->
+<!--                            <li class="todo"><span><i class="far fa-square"></i></span>Finish a project — todo</li>-->
                             <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
                             <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
                         </ul>
