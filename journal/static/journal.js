@@ -59,7 +59,22 @@ $(document).ready(function () {
             if (resp["Success"]===true){
                 $('#addToDo').modal('hide');
                 $('.toast').toast('show');
-            //    подсосать новую тудуху из базы
+                console.log(resp);
+                var dayOfWeek = resp.data.date_time
+                var block = $('.'+dayOfWeek)
+                    // console.log(block);
+                    // console.log('.'+dayOfWeek);
+                var iClass ='far fa-square';
+                if (resp.data.type === "event"){
+                    iClass = 'fas fa-birthday-cake';
+                } else if (resp.data.type === "meeting"){
+                    iClass = 'fas fa-clock';
+                }
+                var meetingTime = "";
+                if (resp.data.type === "meeting"){
+                    meetingTime = resp.data.time;
+                }
+                    block.find('ul').prepend("<li class ="+ resp.data.type +"><span><i class='" + iClass+"'></i></span>" + meetingTime + " " + resp.data.text + " <span class='ul_edit'><i class='fas fa-edit'></i></span><span class='ul_delete'><i class='fas fa-trash-alt'></i></span></li>");
             } else{
                 alert("Make sure you've selected todo type and filled out all the form fields");
             }

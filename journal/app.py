@@ -56,16 +56,17 @@ def create_todo():
         user = session["user_id"]
         todo_type = request.form["todo_type"].lower()
         if todo_type not in ("meeting", "todo", "event", "item from your list"):
-            return jsonify({"Error": "Invalid input"})
+            return jsonify({"Success": False, "data": "Invalid input"})
 
         todo_text = request.form["todo_text"]
         todo_date_time = parse(request.form["todo_date_time"])
         completed = False
         db = get_db(app)
-        db.todos.insert_one({"created": date_created, "user": user, "type": todo_type, "text": todo_text, "date_time": todo_date_time, "completed": completed})
-        return jsonify({"Success": True})
+        new_todo = db.todos.insert_one({"created": date_created, "user": user, "type": todo_type, "text": todo_text, "date_time": todo_date_time, "completed": completed})
+        print(new_todo)
+        return jsonify({"Success": True, "data": {"_id": str(new_todo.inserted_id), "type": todo_type, "text": todo_text, "date_time": todo_date_time.strftime('%b-%d-%Y'), "time": todo_date_time.strftime('%H-%M')}})
     else:
-        return jsonify({"Error": "Invalid user"})
+        return jsonify({"Success": False, "data": "Invalid user"})
 
 
 
