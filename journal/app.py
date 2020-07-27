@@ -59,7 +59,11 @@ def create_todo():
             return jsonify({"Success": False, "data": "Invalid input"})
 
         todo_text = request.form["todo_text"]
-        todo_date_time = parse(request.form["todo_date_time"])
+        if todo_type not in ("meeting"):
+            todo_date_time_first = parse(request.form["todo_date_time"])
+            todo_date_time = todo_date_time_first.replace(hour=00, minute=00)
+        else:
+            todo_date_time = parse(request.form["todo_date_time"])
         completed = False
         db = get_db(app)
         new_todo = db.todos.insert_one({"created": date_created, "user": user, "type": todo_type, "text": todo_text, "date_time": todo_date_time, "completed": completed})
@@ -68,6 +72,17 @@ def create_todo():
     else:
         return jsonify({"Success": False, "data": "Invalid user"})
 
+@app.route("/edit", methods=("GET",))
+def edit():
+    if request.method == "GET":
+        db = get_db(app)
+        current_todo = db.todos.find({"_id": "task._id" })
+        print(current_todo)
+        return jsonify()
+
+@app.route("/another", methods=("GET",))
+def show():
+    return render_template("another.html")
 
 
 @app.route("/login", methods=("GET", "POST"))

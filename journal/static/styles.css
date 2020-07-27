@@ -125,6 +125,7 @@ li.completed_list_item{
 
 .btn-outline-\*:active{
     outline:none;
+    float: right;
 }
 
 .login_container {
@@ -177,4 +178,8 @@ li.completed_list_item{
 
 .toast {
     autohide: false;
+}
+
+.bootstrap-datetimepicker-widget {
+    z-index:9999 !important;
 }
