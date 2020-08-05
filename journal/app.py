@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash
 import datetime
 from datetime import date, time, datetime, timedelta
 from dateutil.parser import parse
+from bson.objectid import ObjectId
+
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -72,13 +74,41 @@ def create_todo():
     else:
         return jsonify({"Success": False, "data": "Invalid user"})
 
-@app.route("/edit", methods=("GET",))
+@app.route("/todo/edit", methods=("GET", "POST"))
 def edit():
-    if request.method == "GET":
-        db = get_db(app)
-        current_todo = db.todos.find({"_id": "task._id" })
-        print(current_todo)
-        return jsonify()
+    # if request.method == "GET":
+    #     db = get_db(app)
+    #     current_todo = db.todos.find({"_id": "task._id" })
+    #     print(current_todo)
+    #     return jsonify()
+    if request.method == "POST":
+        if "user_id" in session:
+            print(request.form)
+            # user = session["user_id"]
+            todo_id = request.form["todo_id"]
+            print(todo_id)
+            todo_type = request.form["todo_type"].lower()
+            if todo_type not in ("meeting", "todo", "event", "item from your list"):
+                return jsonify({"Success": False, "data": "Invalid input"})
+
+            todo_text = request.form["todo_text"]
+            if todo_type not in ("meeting"):
+                todo_date_time_first = parse(request.form["todo_date_time"])
+                todo_date_time = todo_date_time_first.replace(hour=00, minute=00)
+            else:
+                todo_date_time = parse(request.form["todo_date_time"])
+            # completed = False
+            db = get_db(app)
+            # current_todo = db.todos.find({"_id": "task._id"})
+            # print(current_todo)
+            edited_todo = db.todos.update_one({"_id": ObjectId(todo_id)},{"$set": {"type": todo_type, "text": todo_text, "date_time": todo_date_time}})
+            print(edited_todo)
+            return jsonify({"Success": True,
+                            "data": {"type": todo_type, "text": todo_text,
+                                     "date_time": todo_date_time.strftime('%b-%d-%Y'),
+                                     "time": todo_date_time.strftime('%H-%M')}})
+        else:
+            return jsonify({"Success": False, "data": "Invalid user"})
 
 @app.route("/another", methods=("GET",))
 def show():

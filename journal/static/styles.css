@@ -109,6 +109,8 @@ li.completed_list_item{
     text-decoration: line-through;
     background-color: rgba(79,41,144,0.2);
 }
+
+.completed_list_item
 .green {
     color: green;
 }

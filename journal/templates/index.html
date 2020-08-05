@@ -13,9 +13,14 @@
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-datetimepicker.css">
 </head>
     <body>
-        <div class="toast" role="alert" data-delay="1500" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 10%; left: 50%; z-index:1;">
+        <div class="toast create" role="alert" data-delay="1500" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 10%; left: 50%; z-index:1;">
             <div class="toast-body">
                 Todo created!
+            </div>
+        </div>
+        <div class="toast edit" role="alert" data-delay="1500" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 10%; left: 50%; z-index:1;">
+            <div class="toast-body">
+                Todo updated!
             </div>
         </div>
             <H1><span><i class="fas fa-calendar-week"></i></span>{% if "name" in session %}{{name}}'s{%endif%} Week {{ week_number }} ({{monday}} — {{sunday}}){% if "name" in session %}<button type="button" class="btn btn-outline-*"><a href="/logout">Log out</a>{% else %}</button><button type="button" class="btn btn-outline-*"><a href="/login">Log in</a></button><button type="button" class="btn btn-outline-*"><a href="/signup">Sign up</a></button>{% endif %}</H1>
@@ -41,7 +46,7 @@
                                 {% elif task.type == "todo": %}
                                     {% set i_class = "far fa-square" %}
                                 {% endif %}
-                            <li class="{{task.type.capitalize()}}" id="{{task._id}}" data-text="{{task.text}}" data-time="{{task.date_time.hour}}-{{task.date_time.minute}}" data-day="{{task.date_time.day}}" data-date_time="{{task.date_time.isoformat()}}"><span><i class="{{i_class}}"></i></span> {% if task.type == "meeting" %}{{task.date_time.hour}}-{{task.date_time.minute}} {% endif %}{{task.text}}<button type="button" data-toggle="modal" data-target="#editToDo" class="btn btn-outline-info edit-todo"><span class="ul_edit"><i class="fas fa-edit"></i></span></button></li>
+                            <li class="{{task.type}}" id="{{task._id}}" data-type="{{task.type.capitalize()}}" data-text="{{task.text}}" data-time="{{task.date_time.hour}}-{{task.date_time.minute}}" data-day="{{task.date_time.day}}" data-date_time="{{task.date_time.isoformat()}}"><span><i class="{{i_class}}"></i></span> {% if task.type == "meeting" %}{{task.date_time.hour}}-{{task.date_time.minute}} {% endif %}{{task.text}}<button type="button" data-toggle="modal" data-target="#editToDo" class="btn btn-outline-info edit-todo"><span class="ul_edit"><i class="fas fa-edit"></i></span></button></li>
                             {% endfor %}
                             <li class="list_item"><span><i class="fas fa-check-circle"></i></span>Watched "Legally Blonde" — crossed out from a list</li>
                             <li class ="journal_entry"><span><i class="fas fa-feather-alt"></i></span>Dear diary, today nothing happened. — journal entryjavbjhfbvhjabvhbvhjbahjfbvhjbvhjbwbqhjaevbhjsbvhjsbavhjbasvjhbsvjsbvhjabvhjbhvbashbvhjsavbhjabvhjabvdhjbvsdhjabvhjsdbvhjdsbj</li>
@@ -77,10 +82,11 @@
                                                 <h3 class="modal-title">Edit todo</h3>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="/todo/edit" method="post" name="todo_edit">
+                                                <form action="/todo/edit" method="post" name="todo_edit" data-task_id="">
                                                     <div class="input-group mb-3 ">
                                                         <div class="input-group-prepend">
-                                                            <input type="hidden" class="js_todo_type" name="todo_type" value="event_1">
+                                                            <input type="hidden" name="todo_id" value="">
+                                                            <input type="hidden" class="js_todo_type" name="todo_type" value="">
                                                             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Todo type</button>
                                                             <div class="dropdown-menu">
                                                                 <a class="dropdown-item" id="type_todo" href="#">Todo</a>
