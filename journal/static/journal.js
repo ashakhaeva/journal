@@ -96,29 +96,35 @@ $(document).ready(function () {
     });
 
 
-        //close modal when saved/deleted
-
-
-
 
     // Check off specific todos by clicking
     var day = $("ul");
-    day.on("click", ".meeting", function (){
-        var task_id = $(this).attr('id')
-        var completed = false
-        $(this).toggleClass("completed_meeting");
-        console.log("task completed" + task_id + typeof (completed))
+    day.on("click", "li", function (){
+        var task_id = $(this).attr('id');
+        console.log(task_id);
+        $(this).toggleClass("completed_list_item");
+        if  ($(this).hasClass("todo")){
+            $(this)
+                .find('[data-fa-i2svg]')
+                .toggleClass('far fa-square')
+                .toggleClass('fas fa-check-square')
+        }
+        if ($(this).hasClass("completed_list_item")){
+            $.post("/todo/complete", {"todo_id": task_id, "completed": true}, function (resp) {
+                if (resp["Success"] === true){
+                    console.log("Task completed");
+                }
+            });
+        }
+        else {
+            $.post("/todo/complete", {"todo_id": task_id, "completed": false}, function (resp) {
+                if (resp["Success"] === true){
+                    console.log("Task not completed");
+                }
+            });
+        }
     });
-    day.on("click", ".todo", function (){
-        $(this).toggleClass("completed_todo");
-        $(this)
-            .find('[data-fa-i2svg]')
-            .toggleClass('far fa-square')
-            .toggleClass('fas fa-check-square');
-    });
-    day.on("click", ".event", function (){
-        $(this).toggleClass("completed_event");
-    });
+
     day.on("click", ".list_item", function (){
         $(this).toggleClass("completed_list_item");
         $("span", this).toggleClass("green");

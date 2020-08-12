@@ -110,6 +110,24 @@ def edit():
         else:
             return jsonify({"Success": False, "data": "Invalid user"})
 
+@app.route("/todo/complete", methods=("GET", "POST"))
+def complete():
+    if request.method == "POST":
+        if "user_id" in session:
+            print(request.form)
+            todo_id = request.form["todo_id"]
+            completed = request.form["completed"]
+            print(todo_id, completed)
+            db = get_db(app)
+            completed_todo = db.todos.update_one({"_id": ObjectId(todo_id)}, {
+                "$set": {"completed": completed}})
+            print(completed_todo)
+            return jsonify({"Success": True,
+                            "data": {"completed": completed}})
+        else:
+            return jsonify({"Success": False, "data": "Invalid user"})
+
+
 @app.route("/another", methods=("GET",))
 def show():
     return render_template("another.html")
