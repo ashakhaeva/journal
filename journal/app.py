@@ -1,18 +1,21 @@
+import datetime
+from datetime import date, datetime, timedelta
+from dateutil.parser import parse
+
+from bson.objectid import ObjectId
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, g, flash
-from . import db
-from journal.db import get_db
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-import datetime
-from datetime import date, time, datetime, timedelta
-from dateutil.parser import parse
-from bson.objectid import ObjectId
+
+from . import db
+from .config import APP_CONFIG
+from journal.db import get_db
 
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
-    app.config["MONGO_URI"] = ""
-    app.secret_key = b''
+    app.config["MONGO_URI"] = APP_CONFIG['MONGO_URI']
+    app.secret_key = APP_CONFIG['SECRET_KEY']
     with app.app_context():
         db.init_app(app)
     return app
@@ -46,14 +49,21 @@ def get_current_week():
             all_todos[item] = day_todos
         monday = dates[0].strftime("%b %d")
         sunday = dates[6].strftime("%b %d")
-        return render_template('index.html', name=session["name"], week_number = week_number, days = days, monday = monday, sunday = sunday, dates = dates, all_todos = all_todos)
+        return render_template(
+            'index.html',
+            name=session["name"],
+            week_number=week_number,
+            days=days, monday=monday,
+            sunday=sunday,
+            dates=dates,
+            all_todos=all_todos
+        )
     return render_template('/login.html')
 
 
 @app.route("/todo/create", methods=("POST",))
 def create_todo():
     if "user_id" in session:
-        print(request.form)
         date_created = datetime.today()
         user = session["user_id"]
         todo_type = request.form["todo_type"].lower()
@@ -61,76 +71,75 @@ def create_todo():
             return jsonify({"Success": False, "data": "Invalid input"})
 
         todo_text = request.form["todo_text"]
-        if todo_type not in ("meeting"):
+        if todo_type not in "meeting":
             todo_date_time_first = parse(request.form["todo_date_time"])
             todo_date_time = todo_date_time_first.replace(hour=00, minute=00)
         else:
             todo_date_time = parse(request.form["todo_date_time"])
         completed = False
         db = get_db(app)
-        new_todo = db.todos.insert_one({"created": date_created, "user": user, "type": todo_type, "text": todo_text, "date_time": todo_date_time, "completed": completed})
-        print(new_todo)
-        return jsonify({"Success": True, "data": {"_id": str(new_todo.inserted_id), "type": todo_type, "text": todo_text, "date_time": todo_date_time.strftime('%b-%d-%Y'), "time": todo_date_time.strftime('%H-%M')}})
+        new_todo = db.todos.insert_one({
+            "created": date_created,
+            "user": user,
+            "type": todo_type,
+            "text": todo_text,
+            "date_time": todo_date_time,
+            "completed": completed,
+        })
+        return jsonify({
+            "Success": True,
+            "data": {
+                "_id": str(new_todo.inserted_id),
+                "type": todo_type,
+                "text": todo_text,
+                "date_time": todo_date_time.strftime('%b-%d-%Y'),
+                "time": todo_date_time.strftime('%H-%M'),
+            },
+        })
     else:
         return jsonify({"Success": False, "data": "Invalid user"})
 
-@app.route("/todo/edit", methods=("GET", "POST"))
+
+@app.route("/todo/edit", methods=("POST"))
 def edit():
-    # if request.method == "GET":
-    #     db = get_db(app)
-    #     current_todo = db.todos.find({"_id": "task._id" })
-    #     print(current_todo)
-    #     return jsonify()
-    if request.method == "POST":
-        if "user_id" in session:
-            print(request.form)
-            # user = session["user_id"]
-            todo_id = request.form["todo_id"]
-            print(todo_id)
-            todo_type = request.form["todo_type"].lower()
-            if todo_type not in ("meeting", "todo", "event", "item from your list"):
-                return jsonify({"Success": False, "data": "Invalid input"})
+    if "user_id" in session:
+        todo_type = request.form["todo_type"].lower()
+        if todo_type not in ("meeting", "todo", "event", "item from your list"):
+            return jsonify({"Success": False, "data": "Invalid input"})
 
-            todo_text = request.form["todo_text"]
-            if todo_type not in ("meeting"):
-                todo_date_time_first = parse(request.form["todo_date_time"])
-                todo_date_time = todo_date_time_first.replace(hour=00, minute=00)
-            else:
-                todo_date_time = parse(request.form["todo_date_time"])
-            # completed = False
-            db = get_db(app)
-            # current_todo = db.todos.find({"_id": "task._id"})
-            # print(current_todo)
-            edited_todo = db.todos.update_one({"_id": ObjectId(todo_id)},{"$set": {"type": todo_type, "text": todo_text, "date_time": todo_date_time}})
-            print(edited_todo)
-            return jsonify({"Success": True,
-                            "data": {"type": todo_type, "text": todo_text,
-                                     "date_time": todo_date_time.strftime('%b-%d-%Y'),
-                                     "time": todo_date_time.strftime('%H-%M')}})
+        todo_text = request.form["todo_text"]
+        if todo_type not in "meeting":
+            todo_date_time_first = parse(request.form["todo_date_time"])
+            todo_date_time = todo_date_time_first.replace(hour=00, minute=00)
         else:
-            return jsonify({"Success": False, "data": "Invalid user"})
+            todo_date_time = parse(request.form["todo_date_time"])
 
-@app.route("/todo/complete", methods=("GET", "POST"))
+        db = get_db(app)
+        db.todos.update_one({
+            "_id": ObjectId(request.form["todo_id"])},
+            {"$set": {"type": todo_type, "text": todo_text, "date_time": todo_date_time}}
+        )
+        return jsonify({
+            "Success": True,
+            "data": {
+                "type": todo_type, "text": todo_text,
+                "date_time": todo_date_time.strftime('%b-%d-%Y'),
+                "time": todo_date_time.strftime('%H-%M'),
+             },
+        })
+    else:
+        return jsonify({"Success": False, "data": "Invalid user"})
+
+
+@app.route("/todo/complete", methods=("POST",))
 def complete():
-    if request.method == "POST":
-        if "user_id" in session:
-            print(request.form)
-            todo_id = request.form["todo_id"]
-            completed = request.form["completed"]
-            print(todo_id, completed)
-            db = get_db(app)
-            completed_todo = db.todos.update_one({"_id": ObjectId(todo_id)}, {
-                "$set": {"completed": completed}})
-            print(completed_todo)
-            return jsonify({"Success": True,
-                            "data": {"completed": completed}})
-        else:
-            return jsonify({"Success": False, "data": "Invalid user"})
-
-
-@app.route("/another", methods=("GET",))
-def show():
-    return render_template("another.html")
+    if "user_id" in session:
+        todo_id = request.form["todo_id"]
+        completed = request.form["completed"]
+        get_db(app).todos.update_one({"_id": ObjectId(todo_id)}, {"$set": {"completed": completed}})
+        return jsonify({"Success": True, "data": {"completed": completed}})
+    else:
+        return jsonify({"Success": False, "data": "Invalid user"})
 
 
 @app.route("/login", methods=("GET", "POST"))
@@ -156,15 +165,19 @@ def login():
             return redirect('/')
         flash(error)
         return render_template('/login.html')
-@app.route ("/logout", methods=["GET"])
+
+
+@app.route ("/logout", methods=("GET",))
 def log_out():
     session.clear()
     return redirect("/")
+
 
 @app.route("/signup", methods=("GET", "POST"))
 def sign_up():
     if request.method == "GET":
         return render_template('signup.html')
+
     if request.method == "POST":
         name = request.form["name"]
         email = request.form["email"]
@@ -186,17 +199,6 @@ def sign_up():
             return redirect('/login')
         flash(error)
         return render_template("signup.html")
-
-
-
-
-
-@app.route('/testing_db')
-def show_users():
-    user = g.db.users.find_one({"name": "Anastasia"})
-    return jsonify({"name": user["name"]})
-
-
 
 
 if __name__ == "__main__":
